@@ -1,0 +1,18 @@
+from lxml import etree
+import requests
+import time
+
+url = 'http://www.vgchartz.com/yearly/2018/Global/'
+data = requests.get(url).text
+s=etree.HTML(data)
+file=s.xpath('//*[@id="new_entry"]')
+
+for div in file:
+    i=div.xpath('./td[1]/text()')[0]
+    product=div.xpath('./td[2]/table/tr/td[2]/a/text()')[0]
+    console=div.xpath('./td[2]/table/tr/td[2]/text()[1]')[0]
+    company=div.xpath('./td[2]/table/tr/td[2]/text()[2]')[0]
+    week=div.xpath('./td[3]/text()')[0]
+    yearly=div.xpath('./td[4]/text()')[0]
+    total=div.xpath('./td[5]/text()')[0]
+    print(i,product,console,company,week,yearly,total)
