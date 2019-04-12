@@ -1,0 +1,20 @@
+from lxml import etree
+import requests
+import time
+
+for a in range(2005,2019):
+    time.sleep(3)
+    url = 'http://www.vgchartz.com/yearly/{}/Global/'.format(a)
+    data = requests.get(url).text
+    print(a)
+    s=etree.HTML(data)
+    file=s.xpath('//*[@id="rightbar"]/table/tr')
+    #//*[@id="rightbar"]/h2[1]
+    Hardware=s.xpath('//*[@id="rightbar"]/h2[1]/text()')[0]
+    print(Hardware)
+    kong=' '
+    for div in file:
+        platform=div.xpath('./td[1]/text()|./th[1]/text()')[0]
+        yearly=div.xpath('./td[2]/text()|./th[2]/text()')[0]
+        total=div.xpath('./td[4]/text()|./th[3]/text()')[0]
+        print(platform,kong+yearly,kong+total)
