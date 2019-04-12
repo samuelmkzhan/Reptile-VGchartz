@@ -1,0 +1,25 @@
+from lxml import etree
+import requests
+import time
+
+with open('D:\chartz1.xls','w',encoding='utf-8') as f:
+    for a in range(1,280):
+        time.sleep(3)
+        url = 'http://www.vgchartz.com/games/games.php?page={}&results=200&name=&console=&keyword=&publisher=&genre=&order=Sales&ownership=Both&boxart=Both&banner=Both&showdeleted=&region=All&goty_year=&developer=&direction=DESC&showtotalsales=1&shownasales=1&showpalsales=1&showjapansales=1&showothersales=0&showpublisher=1&showdeveloper=1&showreleasedate=1&showlastupdate=0&showvgchartzscore=0&showcriticscore=0&showuserscore=0&showshipped=1&alphasort=&showmultiplat=No'.format(a)
+        data = requests.get(url).text
+        s=etree.HTML(data)
+        file=s.xpath('//*[@id="generalBody"]/table/tr') 
+        for div in file:
+            a=div.xpath('./td[1]/text()|./th[1]/text()')
+            product=div.xpath('./td[3]/a[1]/text()|./th[2]/a/text()')
+            platform=div.xpath('./td[4]/img/@alt|./th[3]/a/text()')
+            Publisher=div.xpath('./td[5]/text()|./th[4]/a/text()')
+            Developer=div.xpath('./td[6]/text()|./th[5]/a/text()')
+            TotalShipped=div.xpath('./td[7]/text()|th[6]/a/text()')
+            TotalSales=div.xpath('./td[8]/text()|th[7]/a/text()')
+            NAsales=div.xpath('./td[9]/text()|th[8]/a/text()')
+            PALsales=div.xpath('./td[10]/text()|th[9]/a/text()')
+            JPsales=div.xpath('./td[11]/text()|th[10]/a/text()')
+            ReleaseData=div.xpath('./td[12]/text()|th[11]/a/text()')
+            print(a,product,platform,Publisher,Developer,TotalShipped,TotalSales,NAsales,PALsales,JPsales,ReleaseData)
+            f.write("{},{},{},{},{},{},{},{},{},{},{},\n".format(a,product,platform,Publisher,Developer,TotalShipped,TotalSales,NAsales,PALsales,JPsales,ReleaseData))
